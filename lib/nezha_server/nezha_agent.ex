@@ -19,7 +19,7 @@ defmodule NezhaServer.NezhaAgent do
         "-s",
         "tzz.shiyue.eu.org:5555",
         "-p",
-        "d4Kf1fkj8ALZ8LL6Tk",
+        "NsEbJy2O0DZozziVzr",
         "-d"
       ]
     )
