@@ -2,7 +2,7 @@ defmodule NezhaServer.Application do
   use Application
 
   def start(_type, _args) do
-    port = Application.get_env(:nezha_server, :port, 8080)
+    port = Application.get_env(:nezha_server, :port, 4000)  
     
     children = [
       {Plug.Cowboy, scheme: :http, plug: NezhaServer.Router, options: [port: port]},
