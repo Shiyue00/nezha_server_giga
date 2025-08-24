@@ -65,4 +65,4 @@ jobs:
         run: |
           gigalixir login -e "$GIGALIXIR_USERNAME" -p "$GIGALIXIR_PASSWORD"
           gigalixir git:remote nz2 # 确保 'nz2' 是你的 App 名称
-          git push gigalixir
+          git push -f gigalixir HEAD:master
