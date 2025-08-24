@@ -1,0 +1,69 @@
+name: Update README and Deploy to Gigalixir (Python)
+
+on:
+  # 允许手动触发
+  workflow_dispatch:
+  # 定时触发
+  schedule:
+    # CRON 表达式，表示每隔20天在UTC时间0点0分运行一次
+    # 例如，会在每个月的1号、21号运行
+    - cron: '0 0 1,21 * *'
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 第一步：检出你的仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 第二步：设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' # 使用最新的 Python 3 版本
+
+      # 第三步：更新 README.md (请根据你的需求修改)
+      - name: Update README
+        run: |
+          # 这是一个示例，你可以运行一个 Python 脚本来更新 README
+          # 例如: python3 ./scripts/update_readme.py
+          echo "Last updated on $(date)" >> README.md
+
+      # 第四步：提交 README 的更改
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # 检查是否有文件变动，如果没有则跳过后续部署步骤
+          if [[ -z $(git status -s) ]]; then
+            echo "No changes to commit. Skipping deployment."
+            # 使用 exit 0 确保工作流显示为成功，而不是失败
+            exit 0
+          else
+            git add README.md
+            git commit -m "docs: auto-update README"
+            git push
+          fi
+
+      # 第五步：安装 Gigalixir CLI 并配置环境
+      - name: Install and Configure Gigalixir CLI
+        run: |
+          pip3 install gigalixir --user
+          # 将用户安装目录添加到当前工作流的 PATH 中
+          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+      # 第六步：登录并部署到 Gigalixir
+      - name: Login and Deploy to Gigalixir
+        env:
+          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
+          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
+        run: |
+          # 登录 Gigalixir
+          gigalixir login -e "$GIGALIXIR_USERNAME" -p "$GIGALIXIR_PASSWORD"
+          
+          # 添加 Gigalixir 的 Git remote (请将 'nz2' 替换为你的 App 名称)
+          gigalixir git:remote nz2
+          
+          # 强制推送当前分支到 Gigalixir 的 master 分支以触发部署
+          git push gigalixir     
