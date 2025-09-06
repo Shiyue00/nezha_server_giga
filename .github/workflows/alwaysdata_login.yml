@@ -1,0 +1,32 @@
+name: Monthly Alwaysdata Login
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 5 1 * *'
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install playwright
+
+      - name: Install Playwright browsers
+        run: python -m playwright install chromium
+
+      - name: Run login script
+        # --- 修改点: 更新了 env 块引用的 Secret 名称 ---
+        env:
+          ALWAYSADATA_USERNAME: ${{ secrets.ALWAYSADATA_USERNAME }}
+          ALWAYSADATA_PASSWORD: ${{ secrets.ALWAYSADATA_PASSWORD }}
+        # ----------------------------------------------
+        run: python alwaysdata_login.py
