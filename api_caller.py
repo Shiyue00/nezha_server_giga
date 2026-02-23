@@ -9,7 +9,7 @@ API_KEY = os.getenv("API_KEY", "YOUR_API_KEY_HERE")
 MODEL = os.getenv("MODEL", "gemini-1.5-flash")
 
 # URL 去掉了 ?key=... 的拼接
-FULL_URL = f"{API_URL}/{MODEL}:generateContent"
+FULL_URL = f"{API_URL}/v1beta/models/{MODEL}:generateContent"
 
 async def fetch(session, index):
     payload = {
