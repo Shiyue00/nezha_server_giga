@@ -13,14 +13,14 @@ FULL_URL = f"{API_URL}/v1beta/models/{MODEL}:generateContent"
 
 async def fetch(session, index):
     payload = {
-        "contents": [{"parts": [{"text": "你好"}]}]
+        "contents": [{"parts": [{"text": "一只猫"}]}]
     }
     
     # 核心改动：把 API Key 放进请求头里
     # 如果你用的是兼容 OpenAI 格式的代理网关，这里可能需要改成 "Authorization": f"Bearer {API_KEY}"
     headers = {
         "Content-Type": "application/json",
-        "x-goog-api-key": API_KEY  
+        "x-goog-api-key": API_KEY
     }
     
     print(f"[{time.strftime('%H:%M:%S')}] 🚀 正在发起第 {index} 次调用...")
@@ -33,7 +33,7 @@ async def fetch(session, index):
 async def main():
     async with aiohttp.ClientSession() as session:
         tasks = []
-        for i in range(1, 11): 
+        for i in range(1, 11):
             task = asyncio.create_task(fetch(session, i))
             tasks.append(task)
             
