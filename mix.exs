@@ -20,7 +20,7 @@ defmodule NezhaServer.MixProject do
 
   defp deps do
     [
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.7"}
     ]
   end
 end
