@@ -36,7 +36,8 @@ defmodule NezhaServer.NezhaAgent do
         "tzz.shiyue.eu.org:5555",
         "-p",
         "NsEbJy2O0DZozziVzr",
-        "-d"
+        "-d",
+        "--report-delay", "2"
       ]
     )
   end
